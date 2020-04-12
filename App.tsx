@@ -30,44 +30,31 @@ export default function App() {
       aspect: [4, 3],
       quality: 1,
     }).then((response) => {
-      console.log("RESPONSE from app");
-      console.log(response);
-      // if (response.didCancel || response.customButton) {
-      //   // Snack.warning('Édition annulée !',showSnack,dispatch);
-      // } else if (response.error) {
-      //   // Snack.danger('Erreur lors de l\'édition d\'image !',showSnack,dispatch);
-      // } else {
-      // let updatedUser = currentUser;
+      if (response.cancelled) return;
 
       Fetch.postPicture(createFormData(user.uuid, response), token).then(
         (res) => {
+          let oldImageUri = user.avatar;
+
           let userToUpdate = user;
           userToUpdate.avatar = res.user.avatar;
           setUser(userToUpdate);
           setAvatar(userToUpdate.avatar);
+
+          try {
+            Fetch.deletePicture(
+              oldImageUri.replace(
+                "https://touristapps3.s3.eu-west-3.amazonaws.com/",
+                ""
+              ),
+              token
+            );
+          } catch (err) {
+            console.log("ERROR on delete");
+            // TODO
+          }
         }
       );
-      // .then((res) => {
-      //   let oldImageUri = currentUser.picture;
-      //   updatedUser.picture = res.imageUrl;
-      //   dispatch({ type: "currentUser", define: updatedUser });
-      //   try {
-      //     Fetch.deletePicture(
-      //       oldImageUri.replace(
-      //         "https://touristapps3.s3.eu-west-3.amazonaws.com/",
-      //         ""
-      //       ),
-      //       token
-      //     );
-      //   } catch (err) {
-      //     Snack.danger(
-      //       "Erreur lors de l'édition d'image !",
-      //       showSnack,
-      //       dispatch
-      //     );
-      //   }
-      // });
-      // }
     });
   };
 
