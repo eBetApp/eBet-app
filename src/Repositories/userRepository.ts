@@ -1,4 +1,4 @@
-const local = "http://78221d3b.ngrok.io/api/";
+const local = "http://68653a5d.ngrok.io/api/";
 
 const _CRUD = {
   delete: async (endPoint: string, token: string) => {
