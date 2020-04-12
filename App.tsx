@@ -1,23 +1,11 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-
 import { StoreProvider } from "./src/hooks/store";
+import MainView from "./src/screens/MainView";
 
 export default function App() {
   return (
     <StoreProvider>
-      <View style={styles.container}>
-        <Text>Open up App.tsx to start working on your app!</Text>
-      </View>
+      <MainView />
     </StoreProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
