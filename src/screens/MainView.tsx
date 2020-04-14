@@ -15,14 +15,14 @@ export default function MainView() {
   const { state, dispatch } = useStore();
 
   const user: User = {
-    uuid: "d3f0d4a0-2f5b-4e3a-840d-b2b83763c8bf",
+    uuid: "80e97e1a-11fd-48be-85c8-dbcb7d65dc46",
     nickname: "bob31",
     email: "bob31@gmail.com",
     password: "123456",
   };
 
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQzZjBkNGEwLTJmNWItNGUzYS04NDBkLWIyYjgzNzYzYzhiZiIsIm5pY2tuYW1lIjoiYm9iMzEiLCJlbWFpbCI6ImJvYjMxYkBnbWFpbC5jb20iLCJpYXQiOjE1ODYxODM0OTJ9.xvHvcJkO3gKKBZ5yXPo_aJu7IIN06d9KHmJTcx3718c";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgwZTk3ZTFhLTExZmQtNDhiZS04NWM4LWRiY2I3ZDY1ZGM0NiIsIm5pY2tuYW1lIjoiYm9iMzEiLCJlbWFpbCI6ImJvYjMxYkBnbWFpbC5jb20iLCJpYXQiOjE1ODY4ODQ5MjJ9.rRG1Eun4Kb5F471fJlpqMyxusuPlMx6PuCtaWSoG4BI";
 
   const chooseImage = async () => {
     try {
