@@ -3,48 +3,46 @@ import { Platform } from "react-native";
 // Expo imports
 import * as ImagePicker from "expo-image-picker";
 
-// Repositories import
+// Repositories imports
 import UserRepository from "../Repositories/userRepository";
 
-// Services import
+// Services imports
 import { cameraPermissions } from "./devicePermissionsService";
 
+// Types imports
 import { User } from "../../ApiTypes/User.types";
+import { ImageInfo } from "expo-image-picker/build/ImagePicker.types";
 
-const chooseImageFromGaleryAsync = async (
-  user: User,
-  token: string
-): Promise<User | null> => {
+const chooseImageFromGaleryAsync = async (): Promise<ImageInfo | null> => {
   await cameraPermissions();
 
+  const responseImage = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    aspect: [4, 3],
+    quality: 1,
+  });
+
+  return responseImage.cancelled ? null : (responseImage as ImageInfo);
+};
+
+const postImageAsync = async (
+  user: User,
+  token: string,
+  image: ImageInfo
+): Promise<User | null> => {
   try {
-    const responseImage = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (responseImage.cancelled) return null;
-
     const responseFetch = await UserRepository.postPicture(
-      _createFormData(user.uuid, responseImage),
+      _createFormData(user.uuid, image),
       token
     );
 
     let oldImageUri = user.avatar;
-    let userToUpdate = user;
-    userToUpdate.avatar = responseFetch.user.avatar;
+    user.avatar = responseFetch.user.avatar;
 
     if (oldImageUri != null && oldImageUri != "") {
-      UserRepository.deletePicture(
-        oldImageUri.replace(
-          "https://touristapps3.s3.eu-west-3.amazonaws.com/", // TODO : stocker qqpart
-          ""
-        ),
-        token
-      );
+      UserRepository.deletePicture(oldImageUri, token);
     }
-    return userToUpdate;
+    return user;
   } catch (err) {
     return null;
   }
@@ -70,4 +68,4 @@ const _createFormData = (uuid: any, photo: any) => {
   return data;
 };
 
-export default { chooseImageFromGaleryAsync };
+export default { chooseImageFromGaleryAsync, postImageAsync };
